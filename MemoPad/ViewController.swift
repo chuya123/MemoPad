@@ -8,29 +8,19 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-    
-    @IBOutlet var titleTextField: UITextField!
+class ViewController: UIViewController ,UITextFieldDelegate{
+      @IBOutlet var titleTextField: UITextField!
     @IBOutlet var contentTextView: UITextView!
-    
-    
-    let saveData: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-    
+        let saveData: NSUserDefaults = NSUserDefaults.standardUserDefaults()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         titleTextField.text = saveData.objectForKey("title") as! String?
         contentTextView.text = saveData.objectForKey("content") as! String?
-        
-        
-        
-        
-        
-        
+          titleTextField.delegate = self
         // Do any additional setup after loading the view.
     }
-    
-    override func didReceiveMemoryWarning() {
+        override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
@@ -38,26 +28,23 @@ class ViewController: UIViewController {
         saveData.setObject(titleTextField.text, forKey: "title")
         saveData.setObject(contentTextView.text,forKey: "content")
         saveData.synchronize()
-        
-        let alert = UIAlertController(title: "タイトル",
+                let alert = UIAlertController(title: "タイトル",
             massage: "本文を入れます。",
         preferredStyle: UIAlertControllerStyle.Alert)(title: "保存",
         message: "メモの保存が完了しました。",
-        
-        alert.addAction(
+                )alert.addAction(
         UIAlertAction(
             title: "OK",
             style: UIAlertActionStyle.Default,
             handler: {action in
                 //ボタンが押された時の操作
                 NSLog("OKボタンが押されました!")
+                
+                self.navigationController?.popToRootViewControllerAnimated(true)
         }
-        
-        )
+                )
         )
             presentationController(alert,animateed: true, completion: nil)
-        
-        
     }
     
     /*
@@ -69,5 +56,15 @@ class ViewController: UIViewController {
     // Pass the selected object to the new view controller.
     }
     */
+    func textFieldShouldReturn(textField: UITextField) -> Bool{
+    textField.resignFirstResponder()
+        return true
+       }
+    }
+    
+    
+    
+    
+    
     
 }
